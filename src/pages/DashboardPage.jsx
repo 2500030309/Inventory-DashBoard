@@ -29,6 +29,18 @@ function readStoredJson(key, fallback) {
   }
 }
 
+function getNextItemId(prefix, list) {
+  const max = list.reduce((highest, item) => {
+    const value = String(item.id || "");
+    if (!value.startsWith(`${prefix}-`)) return highest;
+
+    const numericPart = Number.parseInt(value.slice(prefix.length + 1), 10);
+    return Number.isFinite(numericPart) ? Math.max(highest, numericPart) : highest;
+  }, 0);
+
+  return `${prefix}-${String(max + 1).padStart(4, "0")}`;
+}
+
 export default function DashboardPage({ onLogout }) {
   const [openAdd, setOpenAdd] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
@@ -95,7 +107,7 @@ function handleDelete(id) {
 
 function handleAddItem(newItem) {
   const created = {
-    id: `ITM-${Math.floor(1000 + Math.random() * 9000)}`,
+    id: getNextItemId("ITM", items),
     ...newItem,
   };
 
@@ -156,7 +168,7 @@ function addCatalogItemToInventory(product) {
   }
 
   const created = {
-    id: `CHOC-${Math.floor(1000 + Math.random() * 9000)}`,
+    id: getNextItemId("CHOC", items),
     sku: product.sku, // ✅ link to catalog
     name: product.name,
     category: product.category || "Chocolate",
@@ -171,51 +183,6 @@ function addCatalogItemToInventory(product) {
   setItems((prev) => [created, ...prev]);
   setActive("items"); // ✅ route to Items
 }
-
-function addToCart(item) {
-  const stock = Number(item.qty || 0);
-  if (stock <= 0) return;
-
-  setCart((prev) => {
-    const found = prev.find((c) => c.id === item.id);
-    if (found) {
-      const nextQty = Math.min(found.cartQty + 1, stock);
-      return prev.map((c) => (c.id === item.id ? { ...c, cartQty: nextQty } : c));
-    }
-    return [{ id: item.id, cartQty: 1 }, ...prev];
-  });
-}
-
-function incCart(id) {
-  const item = items.find((x) => x.id === id);
-  const stock = Number(item?.qty || 0);
-
-  setCart((prev) =>
-    prev.map((c) => (c.id === id ? { ...c, cartQty: Math.min(c.cartQty + 1, stock) } : c))
-  );
-}
-
-function decCart(id) {
-  setCart((prev) =>
-    prev
-      .map((c) => (c.id === id ? { ...c, cartQty: c.cartQty - 1 } : c))
-      .filter((c) => c.cartQty > 0)
-  );
-}
-
-function removeFromCart(id) {
-  setCart((prev) => prev.filter((c) => c.id !== id));
-}
-
-const cartItems = useMemo(() => {
-  const map = new Map(cart.map((c) => [c.id, c.cartQty]));
-  return items.filter((it) => map.has(it.id)).map((it) => ({ ...it, cartQty: map.get(it.id) }));
-}, [cart, items]);
-
-const cartTotal = useMemo(
-  () => cartItems.reduce((sum, it) => sum + Number(it.price || 0) * Number(it.cartQty || 0), 0),
-  [cartItems]
-);
 
   return (
     <div className="dash-app">
@@ -295,7 +262,6 @@ const cartTotal = useMemo(
                   items={filtered.slice(0, 5)}
                   onDelete={handleDelete}
                   onEdit={handleStartEdit}
-                  onAddToCart={addToCart}
                   compact
                 />
               </div>
@@ -322,7 +288,6 @@ const cartTotal = useMemo(
                   items={filtered}
                   onDelete={handleDelete}
                   onEdit={handleStartEdit}
-                  onAddToCart={addToCart}
                 />
               </div>
             </section>
@@ -600,20 +565,22 @@ const cartTotal = useMemo(
           
         )}
 
-        <InventoryForm
-          open={openAdd || Boolean(editingItem)}
-          onClose={() => {
-            setOpenAdd(false);
-            setEditingItem(null);
-          }}
-          onSave={editingItem ? handleEditItem : handleAddItem}
-          initialValues={editingItem}
-          mode={editingItem ? "edit" : "add"}
-        />
+        {(openAdd || Boolean(editingItem)) && (
+          <InventoryForm
+            key={editingItem ? `edit-${editingItem.id}` : "add-item"}
+            open={openAdd || Boolean(editingItem)}
+            onClose={() => {
+              setOpenAdd(false);
+              setEditingItem(null);
+            }}
+            onSave={editingItem ? handleEditItem : handleAddItem}
+            initialValues={editingItem}
+            mode={editingItem ? "edit" : "add"}
+          />
+        )}
       </main>
     </div>
 
     
   );
 }
-

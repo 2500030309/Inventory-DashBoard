@@ -12,8 +12,6 @@ export default function ProductCard({ item, mode = "catalog", qty = 0, onAdd, on
   const stars = "★★★★★".slice(0, starsCount);
   const starsDim = "★★★★★".slice(starsCount);
 
-  const canAdd = stock > 0 && qty < stock;
-
   return (
     <div className="shop-card">
       <div className="shop-img">

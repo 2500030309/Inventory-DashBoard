@@ -1,15 +1,3 @@
-/* LuxuryChocolate font temporarily disabled due to OTS parsing errors.
-   If you have a valid .woff2 build of the font place it under
-   src/assets and re-enable the @font-face with only the woff2 source.
-
-@font-face {
-  font-family: "LuxuryChocolate";
-  src: url("./assets/LuxuryChocolate.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-*/
 
 :root {
   --glassDash: rgba(255,255,255,0.12);
@@ -849,8 +837,8 @@ body {
 /* Sidebar glass-dark */
 .sidebar{
   background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
   border-right: 1px solid rgba(255,255,255,0.14);
   box-shadow: 0 20px 60px rgba(0,0,0,0.25);
 }
@@ -875,8 +863,8 @@ body {
 .topbar{
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.04));
   border: 1px solid rgba(255,255,255,0.06);
-  backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
   box-shadow: 0 8px 30px rgba(11,12,16,0.6), var(--dashShadow);
   position: relative;
 }
@@ -924,8 +912,8 @@ body {
 .stat-card{
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03));
   border: 1px solid rgba(255,255,255,0.06);
-  backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
   box-shadow: var(--panel-glow), var(--dashShadow);
 }
 .stat-label{ color: var(--dashMuted); }
@@ -974,8 +962,8 @@ body {
 .panel{
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.14);
-  backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
   box-shadow: var(--dashShadow);
 }
 
@@ -1052,9 +1040,6 @@ body {
   box-shadow: inset 0 0 8px rgba(0,0,0,0.25);
 }
 
-/* Firefox fallback */
-html{ scrollbar-width: thin; }
-html{ scrollbar-color: var(--accent-magenta) transparent; }
 
 @keyframes gradientShift{
   0%{ background-position: 0% 50%; }
@@ -1121,8 +1106,8 @@ html{ scrollbar-color: var(--accent-magenta) transparent; }
 .modal{
   background: rgba(255,255,255,0.10);
   border: 1px solid rgba(255,255,255,0.16);
-  backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
   color: rgba(255,255,255,0.92);
 }
 .modal-head{

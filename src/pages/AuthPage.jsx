@@ -105,7 +105,7 @@ export default function AuthPage({ onAuthSuccess }) {
         email: form.email,
         name: form.name,
       });
-    } catch (err) {
+    } catch {
       setSubmitError("Something went wrong. Try again.");
     }
   }

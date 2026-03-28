@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 const categories = ["Milk Chocolate", "Dark Chocolate", "Chocolate Bars", "Candy"];
 const statuses = ["In Stock", "Low Stock", "Out of Stock"];
@@ -29,15 +29,8 @@ export default function InventoryForm({
     [initialValues]
   );
 
-  const [form, setForm] = useState(emptyForm);
+  const [form, setForm] = useState(() => resolvedInitialValues || emptyForm);
   const [touched, setTouched] = useState(false);
-
-  useEffect(() => {
-    if (open) {
-      setForm(resolvedInitialValues);
-      setTouched(false);
-    }
-  }, [open, resolvedInitialValues]);
 
   const errors = useMemo(() => {
     const e = {};

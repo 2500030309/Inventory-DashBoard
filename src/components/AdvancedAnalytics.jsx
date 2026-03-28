@@ -19,13 +19,19 @@ function Donut({ parts }) {
   // parts: [{ label, value, className }]
   const total = parts.reduce((s, p) => s + p.value, 0) || 1;
 
-  let acc = 0;
-  const stops = parts.map((p) => {
-    const start = (acc / total) * 360;
-    acc += p.value;
-    const end = (acc / total) * 360;
-    return { ...p, start, end };
-  });
+  const stops = parts.reduce(
+    (result, part) => {
+      const start = (result.acc / total) * 360;
+      const nextAcc = result.acc + part.value;
+      const end = (nextAcc / total) * 360;
+
+      return {
+        acc: nextAcc,
+        values: [...result.values, { ...part, start, end }],
+      };
+    },
+    { acc: 0, values: [] }
+  ).values;
 
   // Use CSS variables for colors via className hooks
   // We build a conic gradient string from CSS vars

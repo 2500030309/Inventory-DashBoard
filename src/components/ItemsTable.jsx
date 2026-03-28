@@ -1,4 +1,4 @@
-export default function ItemsTable({ items, onDelete, onEdit, compact, onAddToCart }) {
+export default function ItemsTable({ items, onDelete, onEdit, compact }) {
   return (
     <div className={`table-wrap ${compact ? "compact" : ""}`}>
       <table className="table">
